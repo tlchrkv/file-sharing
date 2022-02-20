@@ -56,30 +56,47 @@ final class ApiController extends Controller
             ->send();
     }
 
+    public function updateAction(string $id)
+    {
+        /** @var File $file */
+        $file = File::findFirstById($id);
+
+        $file->updateFile($_FILES['file']['tmp_name']);
+
+        return $this->response->setStatusCode(204)->send();
+    }
+
     public function encryptAction(string $id)
     {
-        $file = File::findFirst($id);
+        $requestData = file_get_contents('php://input');
 
-        $file->encrypt($this->request->getPost('password'));
+        /** @var File $file */
+        $file = File::findFirstById($id);
 
-        return $this->response->setJsonContent(['status' => 'ok'])->send();
+        $file->encrypt($requestData['password']);
+
+        return $this->response->setStatusCode(204)->send();
     }
 
     public function decryptAction(string $id)
     {
-        $file = File::findFirst($id);
+        $requestData = file_get_contents('php://input');
 
-        $file->decrypt();
+        /** @var File $file */
+        $file = File::findFirstById($id);
 
-        return $this->response->setJsonContent(['status' => 'ok'])->send();
+        $file->decrypt($requestData['password']);
+
+        return $this->response->setStatusCode(204)->send();
     }
 
     public function deleteAction(string $id)
     {
-        $file = File::findFirst($id);
+        /** @var File $file */
+        $file = File::findFirstById($id);
 
-        $file->delete();
+        $file->fullDelete();
 
-        return $this->response->setJsonContent(['status' => 'ok'])->send();
+        return $this->response->setStatusCode(204)->send();
     }
 }

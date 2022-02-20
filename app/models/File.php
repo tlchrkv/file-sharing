@@ -38,7 +38,7 @@ final class File extends Model
             'bind'       => [$shortCode, $shortCode]
         ]);
 
-        if ($file === null) {
+        if ($file === false) {
             throw new FileNotFound();
         }
 
@@ -55,7 +55,7 @@ final class File extends Model
 
     public static function store(StoreFileAction $action): self
     {
-        if (self::isImage($action->tmpName)) {
+        if (self::isImagePlacement($action->tmpName)) {
             ExifFilter::clear($action->tmpName);
         }
 
@@ -77,10 +77,15 @@ final class File extends Model
         return $file;
     }
 
-    private static function isImage(string $tmpName)
+    public function isImage(): bool
+    {
+        return self::isImagePlacement($this->placement);
+    }
+
+    private static function isImagePlacement(string $placement): bool
     {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $isImage = str_contains(finfo_file($finfo, $tmpName), 'image/');
+        $isImage = str_contains(finfo_file($finfo, $placement), 'image/');
         finfo_close($finfo);
 
         return $isImage;
@@ -91,11 +96,25 @@ final class File extends Model
         return $this->public_short_code === $shortCode;
     }
 
+    public function updateFile(string $tmpName): void
+    {
+        if (self::isImagePlacement($tmpName)) {
+            ExifFilter::clear($tmpName);
+        }
+
+        unlink($this->placement);
+        move_uploaded_file($tmpName, $this->placement);
+    }
+
     /**
      * @throws Encryptor\Exceptions\CanNotOpenFile
      */
     public function encrypt(string $password): void
     {
+        if ($this->is_encrypted) {
+            return;
+        }
+
         FileEncryptor::encrypt($this->placement, $password, $this->placement);
 
         $this->is_encrypted = true;
@@ -108,13 +127,17 @@ final class File extends Model
      */
     public function decrypt(string $password): void
     {
+        if (!$this->is_encrypted) {
+            return;
+        }
+
         FileEncryptor::decrypt($this->placement, $password, $this->placement);
 
         $this->is_encrypted = false;
         $this->save();
     }
 
-    public function delete(): void
+    public function fullDelete(): void
     {
         unlink($this->placement);
         $this->delete();
@@ -133,7 +156,29 @@ final class File extends Model
         $now = new \DateTime();
         $storedBefore = new \DateTime($this->stored_before);
 
-        return $now->diff($storedBefore)->format('%d day(s) %H hour(s)');
+        $interval = explode('|', $now->diff($storedBefore)->format('%d|%H'));
+        $daysCount = (int) $interval[0];
+        $hoursCount = (int) $interval[1];
+
+        $humanFormat = '';
+
+        if ($daysCount === 1) {
+            $humanFormat .= '1 day ';
+        }
+
+        if ($daysCount > 1) {
+            $humanFormat .= $daysCount . ' days ';
+        }
+
+        if ($hoursCount === 1) {
+            $humanFormat .= '1 hour';
+        }
+
+        if ($hoursCount > 1) {
+            $humanFormat .= $hoursCount . ' hours';
+        }
+
+        return $humanFormat;
     }
 
     /**

@@ -108,3 +108,5 @@
     </div>
   </div>
 </div>
+
+<script src="/assets/index.js"></script>

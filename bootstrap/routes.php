@@ -11,9 +11,9 @@ $router->setDI($di);
 $router->add('/{shortCode}', 'File::show')->via(['GET', 'POST']);
 
 $router->add('/', 'Index::index')->via(['GET']);
-$router->add('/links', 'Index::links')->via(['GET']);
 
 $router->add('/api/v1/files', 'Api::store')->via(['POST']);
+$router->add('/api/v1/files/{id}', 'Api::update')->via(['POST']);
 $router->add('/api/v1/files/{id}/encrypt', 'Api::encrypt')->via(['PATCH']);
 $router->add('/api/v1/files/{id}/decrypt', 'Api::decrypt')->via(['PATCH']);
 $router->add('/api/v1/files/{id}', 'Api::delete')->via(['DELETE']);

@@ -2,15 +2,23 @@
     <div class="col">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">File</h5>
+                <h5 class="card-title">{{ file.original_name }}</h5>
                 <div class="mt-4">
-                    <div id="previewDiv">
-                        <img class="w-100" id="preview" src="{{ file.getImageBase64Content() }}">
-                    </div>
+                    {% if file.isImage() %}
+                        <div id="previewDiv">
+                            <img class="w-100" id="preview" src="{{ file.getImageBase64Content() }}">
+                        </div>
+                    {% else %}
+                        <span class="material-icons-outlined">insert_drive_file</span>
+                    {% endif %}
                 </div>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Crop</button>
-                    <button type="submit" class="btn btn-primary">Download</button>
+                    {% if file.isImage() %}
+                        <button type="button" class="btn btn-primary" id="cropButton">Crop</button>
+                        <button type="button" class="btn btn-primary" id="updateButton" style="display: none;" data-id="{{ file.id }}">Update</button>
+                    {% endif %}
+
+                    <a href="/{{ file.public_short_code }}" type="submit" class="btn btn-primary">Download</a>
                 </div>
             </div>
         </div>
@@ -21,7 +29,21 @@
             <div class="card-body">
                 <h5 class="card-title">Encryption</h5>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Encrypt</button>
+                    {% if file.is_encrypted %}
+                        <button id="encryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#encryptionModal" style="display: none;">
+                            Encrypt
+                        </button>
+                        <button id="decryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#decryptionModal">
+                            Decrypt
+                        </button>
+                    {% else %}
+                        <button id="encryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#encryptionModal">
+                            Encrypt
+                        </button>
+                        <button id="decryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#decryptionModal" style="display: none;">
+                            Decrypt
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -29,16 +51,83 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Deletion</h5>
-                <h6 class="card-subtitle mb-2 mt-2 text-muted">File will be deleted after {{ file.getExpiresInDaysHours() }}</h6>
+                <h6 class="card-subtitle mb-2 mt-2 text-muted">Will be automatically deleted after {{ file.getExpiresInDaysHours() }}</h6>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Delete Now</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteNowModal">
+                        Delete Now
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="encryptionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="encryptFileForm" data-id="{{ file.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Encrypt file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="encryptFilePasswordInput">You need to set password:</label>
+                    <div class="mb-2 pt-2">
+                        <input type="password" class="form-control" id="encryptFilePasswordInput" placeholder="Password" name="password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Encrypt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="decryptionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="decryptFileForm" data-id="{{ file.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Decrypt file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="decryptFilePasswordInput">Enter password:</label>
+                    <div class="mb-2 pt-2">
+                        <input type="password" class="form-control" id="decryptFilePasswordInput" placeholder="Password" name="password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Decrypt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteNowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteFileForm" data-id="{{ file.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete file now</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete current file?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-primary">Yes, Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if file.isImage() %}
+<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,12 +136,15 @@
             </div>
             <div class="modal-body">
                 <div class="img-container">
-                    <img id="image" src="" class="w-100">
+                    <img id="image" src="{{ file.getImageBase64Content() }}" class="w-100">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="crop">Crop & Update File</button>
+                <button type="button" class="btn btn-primary" id="crop">Crop</button>
             </div>
         </div>
     </div>
 </div>
+{% endif %}
+
+<script src="/assets/manage.js"></script>

@@ -25,6 +25,7 @@
     "cropperjs": "^1.5.12",
     "dropzone": "^6.0.0-beta.2",
     "jquery": "^3.6.0",
+    "jquery-cropper": "^1.0.1",
     "material-icons": "^1.10.7",
     "popper.js": "^1.16.1",
     "resolve-url-loader": "^5.0.0"

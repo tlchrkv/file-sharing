@@ -3,9 +3,13 @@ const webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
-    entry: './app/presentation/assets/app.js',
+    entry: {
+        app: './app/presentation/assets/app.js',
+        index: './app/presentation/assets/pages/index/index.js',
+        manage: './app/presentation/assets/pages/manage/index.js',
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'public/assets')
     },
     module: {
