@@ -8,9 +8,6 @@ const fileUpload = () => {
     const modalDiv = document.getElementById('modal');
     const $modal = new bootstrap.Modal(modalDiv);
 
-    const $resultPublicLink = $('#publicLink');
-    const $resultPrivateLink = $('#privateLink');
-
     let canvas;
     let cropper;
     let fileName;
@@ -74,45 +71,45 @@ const fileUpload = () => {
         e.preventDefault();
 
         if (isImageUploaded) {
-            canvas.toBlob((blob) => submitFormRequest(makeFormData(blob, fileName)));
+            canvas.toBlob((blob) => submitForm(makeFormData(blob, fileName)));
         }
 
         if (!isImageUploaded) {
-            submitFormRequest(makeFormData(file, fileName));
+            submitForm(makeFormData(file, fileName));
         }
+    });
+};
 
-        const makeFormData = (file, fileName) => {
-            const formData = new FormData();
+const makeFormData = (file, fileName) => {
+    const formData = new FormData();
 
-            formData.append('file', file, fileName);
-            formData.append('delete_after', $('#deleteAfterRange').val());
-            formData.append('require_encryption', $('#requireEncryptionCheckbox').is(':checked'));
-            formData.append('password', $('#passwordInput').val());
+    formData.append('file', file, fileName);
+    formData.append('delete_after', $('#deleteAfterRange').val());
+    formData.append('require_encryption', $('#requireEncryptionCheckbox').is(':checked'));
+    formData.append('password', $('#passwordInput').val());
 
-            return formData;
-        };
+    return formData;
+};
 
-        const submitFormRequest = (formData) => {
-            $.ajax('/api/v1/files', {
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: (data) => {
-                    $('#form').hide();
-                    $('#links').show();
+const submitForm = (formData) => {
+    $.ajax('/api/v1/files', {
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: (data) => {
+            $('#form').hide();
+            $('#links').show();
 
-                    $resultPublicLink.val(data.data.public_link);
-                    $resultPrivateLink.val(data.data.private_link);
-                },
-                error: function (data) {
-                    console.log(data);
-                },
-                complete: function () {
-                    // hide progress bar
-                },
-            });
-        };
+            $('#publicLink').val(data.data.public_link);
+            $('#privateLink').val(data.data.private_link);
+        },
+        error: function (data) {
+            console.log(data);
+        },
+        complete: function () {
+            // hide progress bar
+        },
     });
 };
 
