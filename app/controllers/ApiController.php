@@ -68,24 +68,26 @@ final class ApiController extends Controller
 
     public function encryptAction(string $id)
     {
-        $requestData = file_get_contents('php://input');
+        $_PATCH = [];
+        parse_str(file_get_contents('php://input'), $_PATCH);
 
         /** @var File $file */
         $file = File::findFirstById($id);
 
-        $file->encrypt($requestData['password']);
+        $file->encrypt($_PATCH['password']);
 
         return $this->response->setStatusCode(204)->send();
     }
 
     public function decryptAction(string $id)
     {
-        $requestData = file_get_contents('php://input');
+        $_PATCH = [];
+        parse_str(file_get_contents('php://input'), $_PATCH);
 
         /** @var File $file */
         $file = File::findFirstById($id);
 
-        $file->decrypt($requestData['password']);
+        $file->decrypt($_PATCH['password']);
 
         return $this->response->setStatusCode(204)->send();
     }

@@ -1,5 +1,8 @@
 const deleteForm = () => {
     const $deleteFileForm = $('#deleteFileForm');
+    const $modal = new bootstrap.Modal($('#deleteNowModal'));
+
+    $('#deleteNowButton').on('click', () => $modal.show());
 
     $deleteFileForm.on('submit', (e) => {
         e.preventDefault();
@@ -9,7 +12,9 @@ const deleteForm = () => {
             processData: false,
             contentType: false,
             success: (data) => {
-                // crush page
+                $modal.hide();
+                $('#manage').hide();
+                $('#deleted').show();
             },
             error: function (data) {
                 console.log(data);

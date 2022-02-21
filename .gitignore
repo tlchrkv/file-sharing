@@ -2,3 +2,4 @@ vendor
 .phalcon
 node_modules
 public/assets
+storage/postgres-data

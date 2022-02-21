@@ -10,7 +10,7 @@ return new Phalcon\Config([
         'host'     => getenv('POSTGRES_HOST'),
         'username' => getenv('POSTGRES_USER'),
         'password' => getenv('POSTGRES_PASSWORD'),
-        'dbname'   => 'postgres',
+        'dbname'   => getenv('POSTGRES_DB'),
     ],
 
     'application' => [
@@ -19,7 +19,7 @@ return new Phalcon\Config([
         'appDir'         => dirname(__DIR__) . '/app',
         'migrationsDir'  => dirname(__DIR__) . '/migrations',
         'cacheDir'       => dirname(__DIR__) . '/storage/cache',
-        'viewsDir'       => dirname(__DIR__) . '/app/presentation/views',
+        'viewsDir'       => dirname(__DIR__) . '/app/views',
         'modelsDir'      => dirname(__DIR__) . '/app/models',
         'controllersDir' => dirname(__DIR__) . '/app/controllers',
         'validatorsDir' => dirname(__DIR__) . '/app/validators',

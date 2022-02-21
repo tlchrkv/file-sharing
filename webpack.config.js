@@ -4,9 +4,9 @@ const webpack = require('webpack');
 module.exports = {
     mode: 'development',
     entry: {
-        app: './app/presentation/assets/app.js',
-        index: './app/presentation/assets/pages/index/index.js',
-        manage: './app/presentation/assets/pages/manage/index.js',
+        app: './app/assets/app.js',
+        index: './app/assets/pages/index/index.js',
+        manage: './app/assets/pages/manage/index.js',
     },
     output: {
         filename: '[name].js',

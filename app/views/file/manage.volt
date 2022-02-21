@@ -1,4 +1,15 @@
-<div class="row pb-3 mb-3">
+<div id="deleted" style="display: none">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">This file and links have been deleted</h5>
+            <div class="mt-3">
+                <a href="/" type="button" class="btn btn-primary">Upload New File</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row pb-3 mb-3" id="manage">
     <div class="col">
         <div class="card">
             <div class="card-body">
@@ -28,19 +39,26 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">Encryption</h5>
+                <h6 class="card-subtitle mb-2 mt-2 text-muted">
+                    {% if file.is_encrypted %}
+                        File is encrypted
+                    {% else %}
+                        File is not encrypted
+                    {% endif %}
+                </h6>
                 <div class="mt-3">
                     {% if file.is_encrypted %}
-                        <button id="encryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#encryptionModal" style="display: none;">
+                        <button id="encryptOpenModal" type="button" class="btn btn-primary" style="display: none;">
                             Encrypt
                         </button>
-                        <button id="decryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#decryptionModal">
+                        <button id="decryptOpenModal" type="button" class="btn btn-primary">
                             Decrypt
                         </button>
                     {% else %}
-                        <button id="encryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#encryptionModal">
+                        <button id="encryptOpenModal" type="button" class="btn btn-primary">
                             Encrypt
                         </button>
-                        <button id="decryptOpenModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#decryptionModal" style="display: none;">
+                        <button id="decryptOpenModal" type="button" class="btn btn-primary" style="display: none;">
                             Decrypt
                         </button>
                     {% endif %}
@@ -51,9 +69,9 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Deletion</h5>
-                <h6 class="card-subtitle mb-2 mt-2 text-muted">Will be automatically deleted after {{ file.getExpiresInDaysHours() }}</h6>
+                <h6 class="card-subtitle mb-2 mt-2 text-muted">File will be automatically deleted after {{ file.getExpiresInDaysHours() }}</h6>
                 <div class="mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteNowModal">
+                    <button type="button" class="btn btn-primary" id="deleteNowButton">
                         Delete Now
                     </button>
                 </div>
@@ -115,7 +133,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure want to delete current file?
+                    Are you sure want to delete current file and associated links?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>

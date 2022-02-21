@@ -10,6 +10,7 @@ const encryptionToggle = () => {
 
         passwordInput.prop('disabled', true);
         passwordInput.prop('required', false);
+        passwordInput.val('');
     });
 };
 

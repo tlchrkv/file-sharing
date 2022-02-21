@@ -8,7 +8,6 @@ use App\Models\Encryptor\FileEncryptor;
 use App\Models\Exceptions\FileNotFound;
 use App\Models\Exceptions\FileRequirePassword;
 use App\Models\Filters\ExifFilter;
-use Cassandra\Date;
 use Phalcon\Mvc\Model;
 use Ramsey\Uuid\Uuid;
 
@@ -23,6 +22,8 @@ use Ramsey\Uuid\Uuid;
  */
 final class File extends Model
 {
+    private $password = '';
+
     public function initialize()
     {
         $this->setSource('files');
@@ -79,7 +80,15 @@ final class File extends Model
 
     public function isImage(): bool
     {
-        return self::isImagePlacement($this->placement);
+        if (!$this->is_encrypted) {
+            return self::isImagePlacement($this->placement);
+        }
+
+        $tmpDecryptPlacement = $this->createDecryptedCopy();
+        $isImage = self::isImagePlacement($tmpDecryptPlacement);
+        $this->removeDecryptedCopy();
+
+        return $isImage;
     }
 
     private static function isImagePlacement(string $placement): bool
@@ -104,6 +113,9 @@ final class File extends Model
 
         unlink($this->placement);
         move_uploaded_file($tmpName, $this->placement);
+
+        $this->is_encrypted = false;
+        $this->save();
     }
 
     /**
@@ -115,7 +127,9 @@ final class File extends Model
             return;
         }
 
-        FileEncryptor::encrypt($this->placement, $password, $this->placement);
+        FileEncryptor::encrypt($this->placement, $password, $this->placement . '.enc');
+        unlink($this->placement);
+        rename($this->placement . '.enc', $this->placement);
 
         $this->is_encrypted = true;
         $this->save();
@@ -131,7 +145,9 @@ final class File extends Model
             return;
         }
 
-        FileEncryptor::decrypt($this->placement, $password, $this->placement);
+        FileEncryptor::decrypt($this->placement, $password, $this->placement . '.dec');
+        unlink($this->placement);
+        rename($this->placement . '.dec', $this->placement);
 
         $this->is_encrypted = false;
         $this->save();
@@ -143,8 +159,24 @@ final class File extends Model
         $this->delete();
     }
 
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function getImageBase64Content(): string
     {
+        if ($this->is_encrypted) {
+            $tmpDecryptedPlacement = $this->createDecryptedCopy();
+            $data = file_get_contents($tmpDecryptedPlacement);
+            $type = pathinfo($tmpDecryptedPlacement, PATHINFO_EXTENSION);
+            $this->removeDecryptedCopy();
+
+            return 'data:image/' . $type . ';base64,' . base64_encode($data);
+        }
+
         $data = file_get_contents($this->placement);
         $type = pathinfo($this->placement, PATHINFO_EXTENSION);
 
@@ -182,27 +214,42 @@ final class File extends Model
     }
 
     /**
+     * @throws FileRequirePassword
      * @throws Encryptor\Exceptions\CanNotOpenFile
      * @throws Encryptor\Exceptions\WrongPassword
      */
-    public function sendDecryptedToBrowser(string $password): void
+    private function createDecryptedCopy(): string
     {
-        $tmpDecryptedSource = $this->placement . '.dec';
+        if (!$this->is_encrypted) {
+            return $this->placement;
+        }
 
-        FileEncryptor::decrypt($this->placement, $password, $tmpDecryptedSource);
+        if ($this->password === '') {
+            throw new FileRequirePassword();
+        }
 
-        header("Content-Disposition: attachment; filename=\"$this->original_name\"");
-        readfile($tmpDecryptedSource);
-        unlink($tmpDecryptedSource);
+        $tmpDecryptedPlacement = $this->placement . '.dec';
+
+        FileEncryptor::decrypt($this->placement, $this->password, $tmpDecryptedPlacement);
+
+        return $tmpDecryptedPlacement;
+    }
+
+    private function removeDecryptedCopy(): void
+    {
+        unlink($this->placement . '.dec');
     }
 
     /**
-     * @throws FileRequirePassword
+     * @throws Encryptor\Exceptions\CanNotOpenFile
+     * @throws Encryptor\Exceptions\WrongPassword
      */
     public function sendToBrowser(): void
     {
         if ($this->is_encrypted) {
-            throw new FileRequirePassword();
+            header("Content-Disposition: attachment; filename=\"$this->original_name\"");
+            readfile($this->createDecryptedCopy());
+            $this->removeDecryptedCopy();
         }
 
         header("Content-Disposition: attachment; filename=\"$this->original_name\"");

@@ -1,5 +1,5 @@
 <div id="form">
-  <form action="/files" method="POST" enctype="multipart/form-data" id="upload-form">
+  <form action="/files" method="POST" enctype="multipart/form-data" id="upload-form" class="pb-5">
     <div class="row pb-3 mb-3">
       <div class="col">
         <div class="card h-100">
@@ -25,7 +25,7 @@
             <div class="mt-2">
               <div class="mb-3 pt-2">
                 <input type="range" class="form-range" min="1" max="14" step="1" id="deleteAfterRange" value="14" name="delete_after">
-                <div><span id="rangeNumber">14</span> day(s)</div>
+                <div><span id="rangeNumber">14</span> <span id="rangeDimension">days</span></div>
               </div>
             </div>
           </div>

@@ -1,7 +1,8 @@
 const encryptionForm = () => {
     const $encryptFileForm = $('#encryptFileForm');
-    const modalDiv = document.getElementById('encryptionModal');
-    const $modal = new bootstrap.Modal(modalDiv);
+    const $modal = new bootstrap.Modal($('#encryptionModal'));
+
+    $('#encryptOpenModal').on('click', () => $modal.show());
 
     $encryptFileForm.on('submit', (e) => {
         e.preventDefault();

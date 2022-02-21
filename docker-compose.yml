@@ -3,10 +3,10 @@ version: '3.4'
 services:
   nginx:
     image: nginx:1.21-alpine
-    container_name: media_storage
+    container_name: file_sharing
     restart: unless-stopped
     networks:
-      - media_storage
+      - file_sharing
     depends_on:
       - php
     volumes:
@@ -17,10 +17,10 @@ services:
 
   postgres:
     image: postgres:12
-    container_name: media_storage_postgres
+    container_name: file_sharing_postgres
     restart: unless-stopped
     networks:
-      - media_storage
+      - file_sharing
     volumes:
       - ./storage/postgres-data:/var/lib/postgresql/data
     env_file:
@@ -32,9 +32,9 @@ services:
     build:
       context: .
       dockerfile: build/php/Dockerfile
-    container_name: media_storage_php
+    container_name: file_sharing_php
     networks:
-      - media_storage
+      - file_sharing
     depends_on:
       - postgres
     volumes:
@@ -42,18 +42,18 @@ services:
     env_file:
       - .env
 
-#  node:
-#    build:
-#      context: .
-#      dockerfile: build/node/Dockerfile
-#    container_name: media_storage_node
-#    volumes:
-#      - .:/opt/app
-#    networks:
-#      - media_storage
+  node:
+    build:
+      context: .
+      dockerfile: build/node/Dockerfile
+    container_name: file_sharing_node
+    volumes:
+      - .:/opt/app
+    networks:
+      - file_sharing
 
 networks:
-  media_storage:
+  file_sharing:
     driver: "bridge"
     driver_opts:
       com.docker.network.driver.mtu: 1400

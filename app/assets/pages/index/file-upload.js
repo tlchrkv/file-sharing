@@ -98,6 +98,7 @@ const submitForm = (formData) => {
         processData: false,
         contentType: false,
         success: (data) => {
+            $('#passwordInput').val('');
             $('#form').hide();
             $('#links').show();
 

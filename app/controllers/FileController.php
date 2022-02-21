@@ -18,12 +18,16 @@ final class FileController extends Controller
     {
         $file = File::getByShortCode($shortCode);
 
+        if ($file->is_encrypted && $this->request->isPost() && $this->request->getPost('password')) {
+            $file->setPassword($this->request->getPost('password'));
+        }
+
         switch (true) {
             case !$this->request->isPost() && $file->is_encrypted:
                 echo $this->view->render('file', 'enter_password');
                 break;
             case $this->request->isPost() && $this->request->getPost('password') && $file->isPublicShortCode($shortCode):
-                $file->sendDecryptedToBrowser($this->request->getPost('password'));
+                $file->sendToBrowser();
                 break;
             case $this->request->isPost() && $this->request->getPost('password') && !$file->isPublicShortCode($shortCode):
                 // temporary decrypt or for every action

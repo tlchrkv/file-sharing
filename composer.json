@@ -1,7 +1,7 @@
 {
   "name": "mailbot/media-storage",
   "type": "project",
-  "description": "Media Storage",
+  "description": "File Sharing Service",
   "require": {
     "php": "^7.2",
     "phalcon/devtools": "3.4.2",

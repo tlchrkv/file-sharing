@@ -12,7 +12,7 @@ final class FileEncryptor
     private const
         FILE_ENCRYPTION_BLOCKS = 10000,
         ALGORITHM = 'AES-256-CBC',
-        INIT_VECTOR_LENGTH = 32
+        INIT_VECTOR_LENGTH = 16
     ;
 
     /**
