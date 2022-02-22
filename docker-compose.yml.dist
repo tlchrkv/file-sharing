@@ -4,14 +4,14 @@ x-template: &php
   build:
     context: .
     dockerfile: build/php/Dockerfile
-    networks:
-      - file_sharing_service
-    depends_on:
-      - postgres
-    volumes:
-      - .:/opt/app:delegated
-    env_file:
-      - .env
+  networks:
+    - file_sharing_service
+  depends_on:
+    - postgres
+  volumes:
+    - .:/opt/app:delegated
+  env_file:
+    - .env
 
 services:
   nginx:
