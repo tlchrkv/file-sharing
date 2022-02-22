@@ -4,7 +4,6 @@
   "description": "File Sharing Service",
   "require": {
     "php": "^7.2",
-    "phalcon/devtools": "3.4.2",
     "ramsey/uuid": "^4.2"
   },
   "autoload": {

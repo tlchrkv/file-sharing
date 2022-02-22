@@ -31,7 +31,7 @@ update-ca-certificates
 WORKDIR /opt/app
 
 RUN useradd --create-home --uid 1000 --user-group --system app
-#USER app
+USER app
 
 COPY --chown=app:app ./build/php/entrypoint.sh /home/app/entrypoint.sh
 

@@ -6,7 +6,6 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Crypt;
 use Phalcon\Mvc\Url as UrlResolver;
-use Phalcon\Db\Adapter\Pdo\Postgresql as DbAdapter;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Files as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
@@ -16,7 +15,9 @@ use Phalcon\Http\Request;
 $di->setShared('request', new Request());
 
 $di->setShared('config', function () {
-    return include BASE_PATH . '/bootstrap/config.php';
+    $configArray = include BASE_PATH . '/bootstrap/config.php';
+
+    return new Phalcon\Config($configArray);
 });
 
 $di->setShared('url', function () {
@@ -46,13 +47,16 @@ $di->set('view', function () {
         '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
     ]);
 
+    $view->appName = $config->application->name;
+
     return $view;
 }, true);
 
 $di->set('db', function () {
     $config = $this->getConfig();
+    $adapter = 'Phalcon\Db\Adapter\Pdo\\' . $config->database->adapter;
 
-    return new DbAdapter([
+    return new $adapter([
         'host'     => $config->database->host,
         'username' => $config->database->username,
         'password' => $config->database->password,
@@ -84,16 +88,14 @@ $di->set('dispatcher', function () use ($di) {
 
     $evManager->attach(
         'dispatch:beforeException',
-        function ($event, $dispatcher, $exception) {
-            switch ($exception->getCode()) {
-                case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                    $dispatcher->forward([
-                        'controller' => 'error',
-                        'action' => 'notFound',
-                    ]);
-                    return false;
-            }
+        static function ($event, $dispatcher, $exception): bool {
+            $dispatcher->forward([
+                'controller' => 'error',
+                'action' => 'default',
+                'params' => [$exception],
+            ]);
+
+            return false;
         }
     );
 

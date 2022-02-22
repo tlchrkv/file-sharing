@@ -4,6 +4,6 @@ RUN apt-get update
 
 WORKDIR /opt/app
 
-COPY ./build/node/entrypoint.sh /home/app/entrypoint.sh
+COPY ./build/frontend/entrypoint.sh /home/app/entrypoint.sh
 
 CMD /home/app/entrypoint.sh

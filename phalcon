@@ -4,12 +4,13 @@
 use Phalcon\Di\FactoryDefault\Cli as CliDi;
 use Phalcon\Cli\Console as ConsoleApp;
 use Phalcon\Loader;
-use Phalcon\Db\Adapter\Pdo\Postgresql as DbAdapter;
 
 $di = new CliDi();
 
 $di->setShared('config', function () {
-    return include __DIR__ . '/bootstrap/config.php';
+    $configArray = include __DIR__ . '/bootstrap/config.php';
+
+    return new Phalcon\Config($configArray);
 });
 
 $config = $di->getConfig();
@@ -27,7 +28,9 @@ $loader->register();
 require __DIR__ . '/vendor/autoload.php';
 
 $di->set('db', function () use ($config) {
-    return new DbAdapter([
+    $adapter = 'Phalcon\Db\Adapter\Pdo\\' . $config->database->adapter;
+
+    return new $adapter([
         'host' => $config->database->host,
         'username' => $config->database->username,
         'password' => $config->database->password,

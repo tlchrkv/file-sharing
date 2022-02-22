@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-return new Phalcon\Config([
+return [
+    'env' => getenv('APP_ENV'),
     'version' => '1.0',
 
     'database' => [
@@ -14,6 +15,7 @@ return new Phalcon\Config([
     ],
 
     'application' => [
+        'name'           => getenv('APP_NAME'),
         'url'            => getenv('APP_URL'),
         'baseUri'        => '/',
         'appDir'         => dirname(__DIR__) . '/app',
@@ -30,4 +32,4 @@ return new Phalcon\Config([
     'shortLinkLength' => (int) getenv('SHORT_LINK_LENGTH'),
 
     'printNewLine' => true
-]);
+];

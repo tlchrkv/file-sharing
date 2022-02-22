@@ -10,6 +10,7 @@ use App\Models\Exceptions\FileRequirePassword;
 use App\Models\Filters\ExifFilter;
 use Phalcon\Mvc\Model;
 use Ramsey\Uuid\Uuid;
+use Phalcon\Mvc\Model\Resultset;
 
 /**
  * @property string $id
@@ -49,9 +50,9 @@ final class File extends Model
     /**
      * @return File[]
      */
-    public static function findExpired(\DateTimeInterface $dateTime): array
+    public static function findExpired(\DateTimeInterface $dateTime): Resultset
     {
-        return File::find(sprintf('stored_before <= \'%s\'', $dateTime->format('Y-m-d H:i:s')))->toArray();
+        return File::find(sprintf('stored_before <= \'%s\'', $dateTime->format('Y-m-d H:i:s')));
     }
 
     public static function store(StoreFileAction $action): self
