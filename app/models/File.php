@@ -248,8 +248,9 @@ final class File extends Model
     public function sendToBrowser(): void
     {
         if ($this->is_encrypted) {
+            $placement = $this->createDecryptedCopy();
             header("Content-Disposition: attachment; filename=\"$this->original_name\"");
-            readfile($this->createDecryptedCopy());
+            readfile($placement);
             $this->removeDecryptedCopy();
         }
 
