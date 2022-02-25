@@ -1,5 +1,5 @@
 <div id="form">
-  <form action="/files" method="POST" enctype="multipart/form-data" id="upload-form" class="pb-5">
+  <form action="/files" method="POST" enctype="multipart/form-data" id="uploadForm" class="pb-5">
     <div class="row pb-3 mb-3">
       <div class="col">
         <div class="card h-100">
@@ -7,7 +7,9 @@
             <h5 class="card-title">Upload file</h5>
             <div class="mt-4">
               <div id="fileInputDiv" class="mb-2">
-                <input class="form-control" type="file" id="fileInput" name="file">
+                <input required class="form-control" type="file" id="fileInput" name="file" data-max-file-megabytes="{{ maxFileMegabytes }}" aria-describedby="filesizeRestrictions">
+                <div class="invalid-feedback" id="fileInputInvalidFeedback" style="display: none"></div>
+                <div id="filesizeRestrictions" class="form-text">The maximum file size is {{ maxFileMegabytes }} megabytes.</div>
               </div>
 
               <div id="avatarDiv" style="display: none;">

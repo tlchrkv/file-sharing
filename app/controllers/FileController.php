@@ -18,32 +18,36 @@ final class FileController extends Controller
     {
         $file = File::getByShortCode($shortCode);
 
-        if ($file->is_encrypted && $this->request->isPost() && $this->request->getPost('password')) {
+        if ($this->isRequireToAskPassword($file)) {
+            echo $this->view->render('file', 'enter_password');
+
+            exit;
+        }
+
+        if ($this->isRequiredPasswordPassed($file)) {
             $file->setPassword($this->request->getPost('password'));
         }
 
-        switch (true) {
-            case !$this->request->isPost() && $file->is_encrypted:
-                echo $this->view->render('file', 'enter_password');
-                break;
-            case $this->request->isPost() && $this->request->getPost('password') && $file->isPublicShortCode($shortCode):
-                $file->sendToBrowser();
-                break;
-            case $this->request->isPost() && $this->request->getPost('password') && !$file->isPublicShortCode($shortCode):
-                // temporary decrypt or for every action
-                $this->view->file = $file;
-                echo $this->view->render('file', 'manage');
-                break;
-            case !$file->is_encrypted && $file->isPublicShortCode($shortCode):
-                // echo $this->view->render('file', 'preview');
-                $file->sendToBrowser();
-                break;
-            case !$file->is_encrypted && !$file->isPublicShortCode($shortCode):
-                $this->view->file = $file;
-                echo $this->view->render('file', 'manage');
-                break;
+        if ($file->isPublicShortCode($shortCode)) {
+            $file->sendToBrowser();
+
+            exit;
         }
 
-        exit;
+        if ($file->isPrivateShortCode($shortCode)) {
+            echo $this->view->render('file', 'manage', ['file' => $file]);
+
+            exit;
+        }
+    }
+
+    private function isRequireToAskPassword(File $file): bool
+    {
+        return !$this->request->isPost() && $file->isRequirePassword();
+    }
+
+    private function isRequiredPasswordPassed(File $file): bool
+    {
+        return $file->isRequirePassword() && $this->request->isPost() && $this->request->getPost('password');
     }
 }

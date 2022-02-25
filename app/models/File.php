@@ -106,6 +106,21 @@ final class File extends Model
         return $this->public_short_code === $shortCode;
     }
 
+    public function isPrivateShortCode(string $shortCode): bool
+    {
+        return !$this->isPublicShortCode($shortCode);
+    }
+
+    public function isRequirePassword(): bool
+    {
+        return $this->is_encrypted;
+    }
+
+    public function isFreeAccess(): bool
+    {
+        return !$this->is_encrypted;
+    }
+
     public function updateFile(string $tmpName): void
     {
         if (self::isImagePlacement($tmpName)) {

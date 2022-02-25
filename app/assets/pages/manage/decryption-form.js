@@ -16,6 +16,8 @@ const decryptionForm = () => {
                 $modal.hide();
                 $('#decryptOpenModal').hide();
                 $('#encryptOpenModal').show();
+                $('#encryptionStatusEncrypted').hide();
+                $('#encryptionStatusDecrypted').show();
             },
             error: function (data) {
                 console.log(data);

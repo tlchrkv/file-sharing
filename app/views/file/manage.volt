@@ -41,9 +41,11 @@
                 <h5 class="card-title">Encryption</h5>
                 <h6 class="card-subtitle mb-2 mt-2 text-muted">
                     {% if file.is_encrypted %}
-                        File is encrypted
+                        <span id="encryptionStatusEncrypted">File is encrypted</span>
+                        <span id="encryptionStatusDecrypted" style="display: none">File is not encrypted</span>
                     {% else %}
-                        File is not encrypted
+                        <span id="encryptionStatusEncrypted" style="display: none">File is encrypted</span>
+                        <span id="encryptionStatusDecrypted">File is not encrypted</span>
                     {% endif %}
                 </h6>
                 <div class="mt-3">

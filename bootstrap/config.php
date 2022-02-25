@@ -5,7 +5,6 @@ declare(strict_types=1);
 return [
     'env' => getenv('APP_ENV'),
     'version' => '1.0',
-
     'database' => [
         'adapter'  => 'Postgresql',
         'host'     => getenv('POSTGRES_HOST'),
@@ -13,7 +12,6 @@ return [
         'password' => getenv('POSTGRES_PASSWORD'),
         'dbname'   => getenv('POSTGRES_DB'),
     ],
-
     'application' => [
         'name'           => getenv('APP_NAME'),
         'url'            => getenv('APP_URL'),
@@ -28,8 +26,7 @@ return [
         'tasksDir'       => dirname(__DIR__) . '/app/tasks',
         'filesDir'       => dirname(__DIR__) . '/storage/files',
     ],
-
     'shortLinkLength' => (int) getenv('SHORT_LINK_LENGTH'),
-
+    'maxFileMegabytes' => (int) getenv('MAX_FILE_MEGABYTES'),
     'printNewLine' => true
 ];

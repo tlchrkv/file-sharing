@@ -15,6 +15,6 @@ final class IndexController extends Controller
 
     public function indexAction()
     {
-
+        $this->view->maxFileMegabytes = $this->config->maxFileMegabytes;
     }
 }
