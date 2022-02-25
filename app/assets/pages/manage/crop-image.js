@@ -2,13 +2,20 @@ import 'jquery-cropper';
 
 const cropImage = () => {
     const modal = document.getElementById('cropImageModal');
+    const image = document.getElementById('image');
     const preview = document.getElementById('preview');
 
-    const $modal = new bootstrap.Modal(modal);
+    const $modal = new bootstrap.Modal(modal, { backdrop: 'static' });
 
     let canvas;
 
     $('#cropButton').on('click', () => $modal.show());
+
+    window.addEventListener('mousedown', (e) => {
+        if (!document.getElementById('modalContent').contains(e.target)) {
+            $modal.hide();
+        }
+    });
 
     modal.addEventListener('shown.bs.modal', function () {
         $('#image').cropper({viewMode: 3});
@@ -23,6 +30,7 @@ const cropImage = () => {
 
         canvas = $('#image').cropper('getCroppedCanvas');
         preview.src = canvas.toDataURL();
+        image.src = preview.src;
 
         $('#updateButton').show();
     });

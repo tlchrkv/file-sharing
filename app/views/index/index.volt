@@ -12,8 +12,8 @@
                 <div id="filesizeRestrictions" class="form-text">The maximum file size is {{ maxFileMegabytes }} megabytes.</div>
               </div>
 
-              <div id="avatarDiv" style="display: none;">
-                <img class="w-100" id="avatar" src="" alt="avatar">
+              <div id="previewDiv" style="display: none;">
+                <img class="w-100" id="preview" src="" alt="preview">
               </div>
             </div>
           </div>
@@ -52,12 +52,13 @@
     </div>
 
     <div class="btn btn-secondary c-pointer" id="removeFile" style="display: none;">Remove File</div>
+    <div class="btn btn-primary c-pointer" id="cropImageButton" style="display: none;">Crop</div>
     <button type="submit" class="btn btn-primary">Save & Get Public Link</button>
   </form>
 
   <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content" id="modalContent">
         <div class="modal-header">
           <h5 class="modal-title">Crop the image</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

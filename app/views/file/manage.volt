@@ -149,7 +149,7 @@
 {% if file.isImage() %}
 <div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" id="modalContent">
             <div class="modal-header">
                 <h5 class="modal-title">Crop the image</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

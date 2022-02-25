@@ -1,12 +1,12 @@
 import Cropper from "cropperjs";
 
 const fileUpload = () => {
-    const avatar = document.getElementById('avatar');
+    const preview = document.getElementById('preview');
     const image = document.getElementById('image');
     const fileInput = document.getElementById('fileInput');
 
     const modalDiv = document.getElementById('modal');
-    const $modal = new bootstrap.Modal(modalDiv);
+    const $modal = new bootstrap.Modal(modalDiv, { backdrop: 'static' });
 
     let canvas;
     let cropper;
@@ -19,8 +19,7 @@ const fileUpload = () => {
         const $fileInputInvalidFeedback = $('#fileInputInvalidFeedback');
         const $filesizeRestrictions = $('#filesizeRestrictions');
         const done = (url) => {
-            image.src = url;
-            $modal.show();
+            preview.src = url;
         };
 
         $fileInputInvalidFeedback.hide();
@@ -53,6 +52,24 @@ const fileUpload = () => {
             reader.onload = (e) => done(reader.result);
             reader.readAsDataURL(file);
         }
+
+        if (isImageUploaded) {
+            $('#fileInputDiv').hide();
+            $('#previewDiv').show();
+            $('#removeFile').show();
+            $('#cropImageButton').show();
+        }
+    });
+
+    $('#cropImageButton').on('click', () => {
+        image.src = preview.src;
+        $modal.show();
+    });
+
+    window.addEventListener('mousedown', (e) => {
+        if (!document.getElementById('modalContent').contains(e.target)) {
+            $modal.hide();
+        }
     });
 
     modalDiv.addEventListener('shown.bs.modal', function () {
@@ -72,12 +89,7 @@ const fileUpload = () => {
         if (cropper) {
             canvas = cropper.getCroppedCanvas();
 
-            $('#fileInputDiv').hide();
-            $('#avatarDiv').show();
-
-            avatar.src = canvas.toDataURL();
-
-            $('#removeFile').show();
+            preview.src = canvas.toDataURL();
         }
     });
 
@@ -85,9 +97,10 @@ const fileUpload = () => {
         file = null;
         fileName = null;
         fileInput.value = '';
-        $('#avatarDiv').hide();
+        $('#previewDiv').hide();
         $('#fileInputDiv').show();
         $('#removeFile').hide();
+        $('#cropImageButton').hide();
     });
 
     $('#uploadForm').on('submit', (e) => {
