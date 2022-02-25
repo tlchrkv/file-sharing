@@ -29,7 +29,7 @@
                         <button type="button" class="btn btn-primary" id="updateButton" style="display: none;" data-id="{{ file.id }}">Update</button>
                     {% endif %}
 
-                    <a href="/{{ file.public_short_code }}" type="submit" class="btn btn-primary">Download</a>
+                    <button type="button" class="btn btn-primary" id="downloadButton" data-url="/{{ file.public_short_code }}">Download</button>
                 </div>
             </div>
         </div>
@@ -78,6 +78,50 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="downloadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="download" data-id="{{ file.id }}" method="POST" action="/{{ file.public_short_code }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Download file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="downloadFilePasswordInput">Enter password:</label>
+                    <div class="mb-2 pt-2">
+                        <input type="password" class="form-control" id="downloadFilePasswordInput" placeholder="Password" name="password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="downloadEncryptedButton">Download</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateEncryptedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="updateEncryptedFile" data-id="{{ file.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update encrypted file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="updateEncryptedFilePasswordInput">Enter password:</label>
+                    <div class="mb-2 pt-2">
+                        <input type="password" class="form-control" id="updateEncryptedFilePasswordInput" placeholder="Password" name="password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="updateEncryptedButton">Update File</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

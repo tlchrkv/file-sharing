@@ -88,7 +88,6 @@ const fileUpload = () => {
 
         if (cropper) {
             canvas = cropper.getCroppedCanvas();
-
             preview.src = canvas.toDataURL();
         }
     });
@@ -106,13 +105,13 @@ const fileUpload = () => {
     $('#uploadForm').on('submit', (e) => {
         e.preventDefault();
 
-        if (isImageUploaded) {
+        if (isImageUploaded && canvas) {
             canvas.toBlob((blob) => submitForm(makeFormData(blob, fileName)));
+
+            return;
         }
 
-        if (!isImageUploaded) {
-            submitForm(makeFormData(file, fileName));
-        }
+        submitForm(makeFormData(file, fileName));
     });
 };
 

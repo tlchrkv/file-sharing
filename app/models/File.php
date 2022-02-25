@@ -121,7 +121,7 @@ final class File extends Model
         return !$this->is_encrypted;
     }
 
-    public function updateFile(string $tmpName): void
+    public function replaceOnNewDecryptedFile(string $tmpName): void
     {
         if (self::isImagePlacement($tmpName)) {
             ExifFilter::clear($tmpName);

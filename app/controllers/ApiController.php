@@ -61,7 +61,13 @@ final class ApiController extends Controller
         /** @var File $file */
         $file = File::findFirstById($id);
 
-        $file->updateFile($_FILES['file']['tmp_name']);
+        $isFileEncryptedBefore = $file->is_encrypted;
+
+        $file->replaceOnNewDecryptedFile($_FILES['file']['tmp_name']);
+
+        if ($isFileEncryptedBefore && $_POST['password']) {
+            $file->encrypt($_POST['password']);
+        }
 
         return $this->response->setStatusCode(204)->send();
     }
