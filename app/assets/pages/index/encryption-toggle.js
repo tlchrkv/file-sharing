@@ -21,6 +21,7 @@ const encryptionToggle = () => {
         passwordInput.val('');
         passwordInput.removeClass('is-valid');
         passwordInput.removeClass('is-invalid');
+        passwordComplexityMessage.html('');
         passwordComplexityMessage.hide();
 
         if (document.getElementById('fileInput').files.length > 0) {
