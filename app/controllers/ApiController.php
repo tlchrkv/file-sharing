@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\File;
+use App\Models\PasswordComplexity\ComplexityMeter;
 use App\Models\StoreFileAction;
 use App\Validators\StoreActionValidator;
 use Phalcon\Mvc\Controller;
@@ -42,7 +43,7 @@ final class ApiController extends Controller
         );
 
         if ($_POST['require_encryption'] === 'true') {
-            $file->encrypt($_POST['password']);
+            $file->encrypt($_POST['password'], $this->getPasswordComplexityMeter());
         }
 
         return $this->response
@@ -66,7 +67,7 @@ final class ApiController extends Controller
         $file->replaceOnNewDecryptedFile($_FILES['file']['tmp_name']);
 
         if ($isFileEncryptedBefore && $_POST['password']) {
-            $file->encrypt($_POST['password']);
+            $file->encrypt($_POST['password'], $this->getPasswordComplexityMeter());
         }
 
         return $this->response->setStatusCode(204)->send();
@@ -80,7 +81,7 @@ final class ApiController extends Controller
         /** @var File $file */
         $file = File::findFirstById($id);
 
-        $file->encrypt($_PATCH['password']);
+        $file->encrypt($_PATCH['password'], $this->getPasswordComplexityMeter());
 
         return $this->response->setStatusCode(204)->send();
     }
@@ -106,5 +107,30 @@ final class ApiController extends Controller
         $file->fullDelete();
 
         return $this->response->setStatusCode(204)->send();
+    }
+
+    public function checkPasswordComplexityAction()
+    {
+        if (empty($_GET['password'])) {
+            return $this->response
+                ->setStatusCode(422)
+                ->setJsonContent([
+                    'error' => 'Password query parameter is required',
+                ])
+                ->send();
+        }
+
+        return $this->response
+            ->setStatusCode(200)
+            ->setJsonContent([
+                'complexity' => $this->getPasswordComplexityMeter()
+                    ->measure($_GET['password'])->getValue(),
+            ])
+            ->send();
+    }
+
+    private function getPasswordComplexityMeter(): ComplexityMeter
+    {
+        return new ComplexityMeter($this->config->minPasswordLength, $this->config->strongPasswordLength);
     }
 }

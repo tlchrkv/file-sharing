@@ -138,6 +138,7 @@
                     <label for="encryptFilePasswordInput">You need to set password:</label>
                     <div class="mb-2 pt-2">
                         <input type="password" class="form-control" id="encryptFilePasswordInput" placeholder="Password" name="password" required>
+                        <div id="passwordComplexityMessage" style="display: block"></div>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -4,6 +4,8 @@ const fileUpload = () => {
     const preview = document.getElementById('preview');
     const image = document.getElementById('image');
     const fileInput = document.getElementById('fileInput');
+    const $fileInput = $('#fileInput');
+    const $passwordInput = $('#passwordInput');
 
     const modalDiv = document.getElementById('modal');
     const $modal = new bootstrap.Modal(modalDiv, { backdrop: 'static' });
@@ -24,6 +26,7 @@ const fileUpload = () => {
 
         $fileInputInvalidFeedback.hide();
         $filesizeRestrictions.show();
+        $fileInput.removeClass('is-invalid');
 
         isImageUploaded = files[0]['type'].split('/')[0] === 'image';
 
@@ -35,8 +38,7 @@ const fileUpload = () => {
         const filesize = (file.size / 1024 / 1024).toFixed(2);
 
         if (filesize > parseInt(fileInput.dataset.maxFileMegabytes)) {
-            $('#uploadForm').addClass('was-validated');
-
+            $fileInput.addClass('is-invalid');
             $fileInputInvalidFeedback.html(`${filesize} MB file size is too large. Max allowed size is ${fileInput.dataset.maxFileMegabytes} MB`);
             $fileInputInvalidFeedback.show();
             $filesizeRestrictions.hide();
@@ -58,6 +60,10 @@ const fileUpload = () => {
             $('#previewDiv').show();
             $('#removeFile').show();
             $('#cropImageButton').show();
+        }
+
+        if ($passwordInput.prop('disabled') || (!$passwordInput.prop('disabled') && $passwordInput.val().length >= 6)) {
+            $('#saveAndGetPublicLink').prop('disabled', false);
         }
     });
 
@@ -100,6 +106,7 @@ const fileUpload = () => {
         $('#fileInputDiv').show();
         $('#removeFile').hide();
         $('#cropImageButton').hide();
+        $('#saveAndGetPublicLink').prop('disabled', true);
     });
 
     $('#uploadForm').on('submit', (e) => {

@@ -28,5 +28,7 @@ return [
     ],
     'shortLinkLength' => (int) getenv('SHORT_LINK_LENGTH'),
     'maxFileMegabytes' => (int) getenv('MAX_FILE_MEGABYTES'),
+    'minPasswordLength' => (int) getenv('MIN_PASSWORD_LENGTH'),
+    'strongPasswordLength' => (int) getenv('STRONG_PASSWORD_LENGTH'),
     'printNewLine' => true
 ];

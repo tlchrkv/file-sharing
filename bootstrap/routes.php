@@ -18,6 +18,8 @@ $router->add('/api/v1/files/{id}/encrypt', 'Api::encrypt')->via(['PATCH']);
 $router->add('/api/v1/files/{id}/decrypt', 'Api::decrypt')->via(['PATCH']);
 $router->add('/api/v1/files/{id}', 'Api::delete')->via(['DELETE']);
 
+$router->add('/api/v1/check-password-complexity', 'Api::checkPasswordComplexity')->via(['GET']);
+
 $router->handle();
 
 return $router;

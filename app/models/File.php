@@ -8,6 +8,9 @@ use App\Models\Encryptor\FileEncryptor;
 use App\Models\Exceptions\FileNotFound;
 use App\Models\Exceptions\FileRequirePassword;
 use App\Models\Filters\ExifFilter;
+use App\Models\PasswordComplexity\ComplexityLevel;
+use App\Models\PasswordComplexity\ComplexityMeter;
+use App\Models\PasswordComplexity\WeakPassword;
 use Phalcon\Mvc\Model;
 use Ramsey\Uuid\Uuid;
 use Phalcon\Mvc\Model\Resultset;
@@ -136,11 +139,16 @@ final class File extends Model
 
     /**
      * @throws Encryptor\Exceptions\CanNotOpenFile
+     * @throws WeakPassword
      */
-    public function encrypt(string $password): void
+    public function encrypt(string $password, ComplexityMeter $complexityMeter): void
     {
         if ($this->is_encrypted) {
             return;
+        }
+
+        if ($complexityMeter->measure($password)->getValue() === ComplexityLevel::low()->getValue()) {
+            throw new WeakPassword();
         }
 
         FileEncryptor::encrypt($this->placement, $password, $this->placement . '.enc');

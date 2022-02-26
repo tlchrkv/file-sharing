@@ -9,7 +9,7 @@
               <div id="fileInputDiv" class="mb-2">
                 <input required class="form-control" type="file" id="fileInput" name="file" data-max-file-megabytes="{{ maxFileMegabytes }}" aria-describedby="filesizeRestrictions">
                 <div class="invalid-feedback" id="fileInputInvalidFeedback" style="display: none"></div>
-                <div id="filesizeRestrictions" class="form-text">The maximum file size is {{ maxFileMegabytes }} megabytes.</div>
+                <div id="filesizeRestrictions" class="form-text">The maximum file size is {{ maxFileMegabytes }} MB.</div>
               </div>
 
               <div id="previewDiv" style="display: none;">
@@ -42,7 +42,8 @@
                 <label class="form-check-label" for="requireEncryptionCheckbox">Enable</label>
               </div>
               <div class="mb-2 pt-2">
-                <input type="password" class="form-control" id="passwordInput" placeholder="Password" name="password" disabled>
+                <input type="password" class="form-control" id="passwordInput" placeholder="Password" name="password" disabled aria-describedby="passwordComplexityMessage">
+                <div id="passwordComplexityMessage" style="display: block"></div>
               </div>
             </div>
           </div>
@@ -53,7 +54,7 @@
 
     <div class="btn btn-secondary c-pointer" id="removeFile" style="display: none;">Remove File</div>
     <div class="btn btn-primary c-pointer" id="cropImageButton" style="display: none;">Crop</div>
-    <button type="submit" class="btn btn-primary">Save & Get Public Link</button>
+    <button type="submit" class="btn btn-primary" id="saveAndGetPublicLink" disabled>Save & Get Public Link</button>
   </form>
 
   <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" style="display: none;">
