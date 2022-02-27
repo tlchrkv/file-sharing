@@ -35,7 +35,7 @@ final class FileController extends Controller
         }
 
         if ($file->isPrivateShortCode($shortCode)) {
-            echo $this->view->render('file', 'manage', ['file' => $file]);
+            echo $this->view->render('file', 'admin', ['file' => $file]);
 
             exit;
         }

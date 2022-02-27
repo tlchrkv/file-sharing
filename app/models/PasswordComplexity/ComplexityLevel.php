@@ -35,11 +35,11 @@ final class ComplexityLevel
 
     public function getPosition(): int
     {
-        if ($this->value === 'weak') {
+        if ($this->value === 'low') {
             return 1;
         }
 
-        if ($this->value === 'medium') {
+        if ($this->value === 'normal') {
             return 2;
         }
 
