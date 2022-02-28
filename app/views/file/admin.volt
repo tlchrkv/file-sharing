@@ -212,4 +212,4 @@
 </div>
 {% endif %}
 
-<script src="/assets/manage.js"></script>
+<script src="/assets/admin.js"></script>
