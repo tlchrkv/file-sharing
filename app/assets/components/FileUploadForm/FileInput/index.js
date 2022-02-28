@@ -31,6 +31,7 @@ export default class FileInput {
       if (this.file.fileSize > this.maxFileSize) {
         this.showError(`${this.file.fileSize} MB file size is too large. Max allowed size is ${this.maxFileSize} MB`);
         this.clearInput();
+        SubmitFormButton.disable();
         return;
       }
 

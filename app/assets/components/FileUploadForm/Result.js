@@ -3,8 +3,16 @@ import SubmitFormButton from "./SubmitFormButton";
 
 export default class Result {
   static setupHandlersOnClick() {
-    $('#file-upload__copy-public-link').on('click', () => Result.copyToClipboard('public'));
-    $('#file-upload__copy-private-link').on('click', () => Result.copyToClipboard('private'));
+    if (navigator.clipboard && window.isSecureContext) {
+      $('#file-upload__copy-public-link').on('click', () => Result.copyToClipboard('public'));
+      $('#file-upload__copy-private-link').on('click', () => Result.copyToClipboard('private'));
+    }
+
+    if (typeof navigator.clipboard === 'undefined' || !window.isSecureContext) {
+      $('#file-upload__copy-public-link').hide();
+      $('#file-upload__copy-private-link').hide();
+      $('.input-group').removeClass('input-group');
+    }
 
     $('#file-upload__add-another-file').on('click', () => {
       $('#file-upload__file-input').val('');
