@@ -272,12 +272,20 @@ final class File extends Model
     {
         if ($this->is_encrypted) {
             $placement = $this->createDecryptedCopy();
-            header("Content-Disposition: attachment; filename=\"$this->original_name\"");
-            readfile($placement);
+            $this->setupFileReturnResponse($placement);
             $this->removeDecryptedCopy();
+
+            return;
         }
 
+        $this->setupFileReturnResponse($this->placement);
+    }
+
+    private function setupFileReturnResponse(string $filePlacement): void
+    {
+        header('Cache-Control: No-Store');
         header("Content-Disposition: attachment; filename=\"$this->original_name\"");
-        readfile($this->placement);
+        header('Content-Length: ' . filesize($filePlacement));
+        readfile($filePlacement);
     }
 }
