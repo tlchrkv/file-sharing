@@ -11,7 +11,7 @@ final class FileController extends Controller
 {
     public function initialize()
     {
-        $this->view->setTemplateAfter('common');
+        $this->view->setTemplateAfter('simple');
     }
 
     public function showAction(string $shortCode)
@@ -19,9 +19,7 @@ final class FileController extends Controller
         $file = File::getByShortCode($shortCode);
 
         if ($this->isRequireToAskPassword($file)) {
-            echo $this->view->render('file', 'enter_password');
-
-            exit;
+            return $this->view->render('file', 'enter_password');
         }
 
         if ($this->isRequiredPasswordPassed($file)) {
@@ -30,15 +28,13 @@ final class FileController extends Controller
 
         if ($file->isPublicShortCode($shortCode)) {
             $file->sendToBrowser();
-
-            exit;
         }
 
         if ($file->isPrivateShortCode($shortCode)) {
-            echo $this->view->render('file', 'admin', ['file' => $file]);
-
-            exit;
+            return $this->view->render('file', 'admin', ['file' => $file]);
         }
+
+        exit;
     }
 
     private function isRequireToAskPassword(File $file): bool

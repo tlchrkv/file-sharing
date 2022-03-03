@@ -4,9 +4,20 @@ export default class ComplexityView {
     this.$validationMessage = $validationMessage;
   }
 
-  clearComplexity() {
+  clear() {
+    this.$input.removeClass('is-invalid');
+    this.$validationMessage.removeClass('invalid-feedback');
     this.$validationMessage.html('');
     this.$validationMessage.hide();
+  }
+
+  error(message) {
+    this.$input.removeClass('is-valid');
+    this.$input.addClass('is-invalid');
+    this.$validationMessage.removeClass('valid-feedback');
+    this.$validationMessage.addClass('invalid-feedback');
+    this.$validationMessage.show();
+    this.$validationMessage.html(message);
   }
 
   lowComplexity() {

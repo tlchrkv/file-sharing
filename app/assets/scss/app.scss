@@ -2,6 +2,20 @@
 @import "~material-icons/iconfont/material-icons.scss";
 @import "~cropperjs";
 
+.card, .form-check, .form-control, .btn {
+  border-radius: 2px;
+}
+.card {
+  min-width: 294px;
+}
+@media (max-width: 635px) {
+  .col-left {
+    margin-bottom: 1rem;
+  }
+  .container {
+    height: 100% !important;
+  }
+}
 .va-m {
   vertical-align: middle;
 }
@@ -16,4 +30,16 @@
 }
 .c-pointer {
   cursor: pointer;
+}
+.material-icons {
+  vertical-align: middle;
+}
+#file-upload__days-range {
+  cursor: pointer;
+}
+.btn-editor {
+  transition: 0.15s;
+}
+.btn-editor:hover {
+  background-color: #f9f9f9;
 }

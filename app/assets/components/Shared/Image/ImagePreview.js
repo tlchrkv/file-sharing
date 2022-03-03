@@ -4,7 +4,7 @@ export default class ImagePreview {
     reader.onload = (e) => ImagePreview.setSource(reader.result);
     reader.readAsDataURL(file.raw);
 
-    $('#file-upload__preview-wrapper').show();
+    document.getElementById('file-upload__preview-wrapper').style.display = 'flex';
   }
 
   static getSource() {

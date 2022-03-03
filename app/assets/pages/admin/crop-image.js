@@ -1,7 +1,13 @@
 import 'jquery-cropper';
+import ComplexityView from "../../components/Shared/PasswordComplexity/ComplexityView";
 
 const cropImage = () => {
     const modal = document.getElementById('cropImageModal');
+
+    if (!modal) {
+        return;
+    }
+
     const modalUpdate = document.getElementById('updateEncryptedModal');
     const image = document.getElementById('image');
     const preview = document.getElementById('preview');
@@ -10,9 +16,18 @@ const cropImage = () => {
     const $modal = new bootstrap.Modal(modal, { backdrop: 'static' });
     const $modalUpdate = new bootstrap.Modal(modalUpdate, { backdrop: 'static' });
 
+    const $passwordInput = $('#updateEncryptedFilePasswordInput');
+    const $passwordMessage = $('#updateEncryptedFilePasswordMessage');
+    const complexityView = new ComplexityView($passwordInput, $passwordMessage);
+
+    $passwordInput.on('keyup change', () => complexityView.clear());
+
     let canvas;
 
-    $('#cropButton').on('click', () => $modal.show());
+    $('#cropButton').on('click', () => {
+        $modal.show();
+        $passwordInput.focus();
+    });
 
     window.addEventListener('mousedown', (e) => {
         if (!document.getElementById('modalContent').contains(e.target)) {
@@ -65,7 +80,7 @@ const cropImage = () => {
                     updateButton.hide();
                 },
                 error: function (data) {
-                    console.log(data);
+                    complexityView.error(data.responseJSON.error);
                 },
                 complete: function () {
                     // hide progress bar

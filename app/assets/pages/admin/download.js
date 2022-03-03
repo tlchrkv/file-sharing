@@ -1,6 +1,7 @@
 const download = () => {
     const $downloadButton = $('#downloadButton');
     const $downloadEncryptedButton = $('#downloadEncryptedButton');
+    const $downloadPasswordInput = $('#downloadFilePasswordInput');
     const encryptOpenModal = document.getElementById('encryptOpenModal');
 
     const modal = document.getElementById('downloadModal');
@@ -12,6 +13,7 @@ const download = () => {
 
         if (display === 'none') {
             $modal.show();
+            $downloadPasswordInput.focus();
 
             return;
         }

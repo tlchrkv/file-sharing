@@ -22,8 +22,18 @@ final class ErrorController extends Controller
                 ->send();
         }
 
-        $this->view->setTemplateAfter('common');
+        $this->view->setTemplateAfter('simple');
         $this->view->message = $exception->getMessage();
         $this->view->trace = $this->config->env === 'local' ? nl2br(htmlentities($exception->getTraceAsString())) : '';
+
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            $this->view->btnLink = '/';
+            $this->view->btnText = 'Go to main page';
+        }
+
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            $this->view->btnLink = $_SERVER['HTTP_REFERER'];
+            $this->view->btnText = 'Go back';
+        }
     }
 }

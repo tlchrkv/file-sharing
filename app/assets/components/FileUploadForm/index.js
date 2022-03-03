@@ -57,6 +57,7 @@ export default class FileUploadForm {
         $('#file-upload__password-input').val('');
         $('#file-upload').hide();
         $('#file-upload__result').show();
+        $('#common-template__header').hide();
 
         $('#file-upload__public-link').val(data.data.public_link);
         $('#file-upload__private-link').val(data.data.private_link);

@@ -11,5 +11,5 @@ $(document).ready(() => {
     deleteForm();
     cropImage();
     download();
-    PasswordComplexity.setupHandlerOnKeyup($('#encryptFilePasswordInput'));
+    PasswordComplexity.setupHandlerOnKeyup($('#encryptFilePasswordInput'), $('#encryptFilePasswordMessage'));
 });

@@ -17,6 +17,7 @@ export default class FileInput {
   }
 
   setupHandlerOnChanges() {
+    this.wrapper.addEventListener('click', () => this.el.click());
     this.el.addEventListener('change', (e) => {
       this.clearErrors();
 
@@ -40,6 +41,13 @@ export default class FileInput {
         ImagePreview.render(this.file);
         RemoveFileButton.show();
         this.openCroppingModalButton.show();
+      }
+
+      if (!this.file.isImage) {
+        this.hide();
+        document.getElementById('file-upload__file-wrapper').style.display = 'flex';
+        RemoveFileButton.show();
+        $('#file-upload__file-name').text(this.file.fileName);
       }
 
       if (this.$passwordInput.prop('disabled') || (!this.$passwordInput.prop('disabled') && this.$passwordInput.val().length >= 6)) {

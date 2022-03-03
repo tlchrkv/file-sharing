@@ -18,9 +18,11 @@ export default class Result {
       $('#file-upload__file-input').val('');
       $('#file-upload__remove').hide();
       $('#file-upload__result').hide();
+      $('#common-template__header').show();
       $('#file-upload').show();
-      $('#file-upload__file-input-wrapper').show();
+      document.getElementById('file-upload__file-input-wrapper').style.display = 'flex';
       $('#file-upload__preview-wrapper').hide();
+      $('#file-upload__file-wrapper').hide();
       $('#file-upload__open-crop-modal').hide();
       new PasswordInput().disable();
       SubmitFormButton.disable();

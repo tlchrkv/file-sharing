@@ -1,8 +1,19 @@
+import ComplexityView from "../../components/Shared/PasswordComplexity/ComplexityView";
+
 const decryptionForm = () => {
     const $decryptFileForm = $('#decryptFileForm');
     const $modal = new bootstrap.Modal($('#decryptionModal'));
 
-    $('#decryptOpenModal').on('click', () => $modal.show());
+    const $passwordInput = $('#decryptFilePasswordInput');
+    const $passwordMessage = $('#decryptFilePasswordMessage');
+    const complexityView = new ComplexityView($passwordInput, $passwordMessage);
+
+    $passwordInput.on('keyup change', () => complexityView.clear());
+
+    $('#decryptOpenModal').on('click', () => {
+        $modal.show();
+        $passwordInput.focus();
+    });
 
     $decryptFileForm.on('submit', (e) => {
         e.preventDefault();
@@ -20,7 +31,7 @@ const decryptionForm = () => {
                 $('#encryptionStatusDecrypted').show();
             },
             error: function (data) {
-                console.log(data);
+                complexityView.error(data.responseJSON.error);
             },
             complete: function () {
                 // hide progress bar

@@ -12,7 +12,6 @@ use App\Models\PasswordComplexity\ComplexityLevel;
 use App\Models\PasswordComplexity\ComplexityMeter;
 use App\Models\PasswordComplexity\WeakPassword;
 use Phalcon\Mvc\Model;
-use Ramsey\Uuid\Uuid;
 use Phalcon\Mvc\Model\Resultset;
 
 /**
@@ -272,16 +271,16 @@ final class File extends Model
     {
         if ($this->is_encrypted) {
             $placement = $this->createDecryptedCopy();
-            $this->setupFileReturnResponse($placement);
+            $this->setupFileDownloadResponse($placement);
             $this->removeDecryptedCopy();
 
             return;
         }
 
-        $this->setupFileReturnResponse($this->placement);
+        $this->setupFileDownloadResponse($this->placement);
     }
 
-    private function setupFileReturnResponse(string $filePlacement): void
+    private function setupFileDownloadResponse(string $filePlacement): void
     {
         header('Cache-Control: No-Store');
         header("Content-Disposition: attachment; filename=\"$this->original_name\"");
