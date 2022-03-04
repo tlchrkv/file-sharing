@@ -11,7 +11,7 @@ export default class Result {
     if (typeof navigator.clipboard === 'undefined' || !window.isSecureContext) {
       $('#file-upload__copy-public-link').hide();
       $('#file-upload__copy-private-link').hide();
-      $('.input-group').removeClass('input-group');
+      $('.input-group').addClass('input-group__no-buttons');
     }
 
     $('#file-upload__add-another-file').on('click', () => {

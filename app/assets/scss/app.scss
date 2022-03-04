@@ -2,8 +2,11 @@
 @import "~material-icons/iconfont/material-icons.scss";
 @import "~cropperjs";
 
-.card, .form-check, .form-control, .btn {
+.card, .form-check, .form-control, .btn, .input-group-text {
   border-radius: 2px;
+}
+.input-group__no-buttons input {
+  border-radius: 0 2px 2px 0 !important;
 }
 .card {
   min-width: 294px;

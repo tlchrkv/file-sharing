@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="modal-footer" style="border-top: none;justify-content: center;padding-top: 0;">
-          <button type="button" class="btn btn-primary" id="file-upload__crop-apply"><span class="material-icons">check</span> Apply</button>
+          <button type="button" class="btn btn-primary" id="file-upload__crop-apply"><span class="material-icons" style="vertical-align: bottom;">check</span> Apply</button>
         </div>
       </div>
     </div>
