@@ -1,7 +1,7 @@
 <div class="pb-3 mb-3">
     <div class="card" style="border: none;">
         <div class="card-body">
-            <h1 class="card-title ta-c"><span style="color: green;">E</span>n©r<span style="color: darkorange;">y</span>pt<span>e</span>d c<span>o</span>nt<span style="color: purple;">e</span>nt</h1>
+            <h1 class="card-title ta-c"><span style="color: green;">E</span>ncr<span style="color: darkorange;">y</span>pt<span>e</span>d c<span>o</span>nt<span style="color: purple;">e</span>nt</h1>
 {#            <h6 class="card-subtitle mb-2 text-muted ta-c">Enter password</h6>#}
             <div class="mt-4 d-flex justify-content-center">
                 <div class="p-3 flex-1" style="max-width: 520px;">

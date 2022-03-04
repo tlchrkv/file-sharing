@@ -59,7 +59,7 @@
         <div class="col">
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">En©ryption</h5>
+                    <h5 class="card-title">Encryption</h5>
                     <h6 class="card-subtitle mb-2 mt-2 text-muted">
                         {% if file.is_encrypted %}
                             <span id="encryptionStatusEncrypted">File is encrypted</span>
@@ -73,7 +73,7 @@
                         {% if file.is_encrypted %}
                             <button id="encryptOpenModal" type="button" class="btn btn-outline-dark" style="display: none;">
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock</span>
-                                En©rypt
+                                Encrypt
                             </button>
                             <button id="decryptOpenModal" type="button" class="btn btn-outline-dark">
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock_open</span>
@@ -82,7 +82,7 @@
                         {% else %}
                             <button id="encryptOpenModal" type="button" class="btn btn-outline-dark">
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock</span>
-                                En©rypt
+                                Encrypt
                             </button>
                             <button id="decryptOpenModal" type="button" class="btn btn-outline-dark" style="display: none;">
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock_open</span>

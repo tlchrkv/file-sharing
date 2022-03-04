@@ -75,7 +75,7 @@
           <div class="card-body">
             <div class="card-title d-flex justify-content-between">
               <h5>
-                <span class="material-icons-outlined" style="vertical-align: sub;">lock</span> En©ryption
+                <span class="material-icons-outlined" style="vertical-align: sub;">lock</span> Encryption
               </h5>
               <div class="form-check">
                 <input class="form-check-input c-pointer" type="checkbox" value="1" id="file-upload__encrypt-checkbox" name="require_encryption">
