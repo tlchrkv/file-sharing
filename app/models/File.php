@@ -18,6 +18,7 @@ use Phalcon\Mvc\Model\Resultset;
  * @property string $id
  * @property string $original_name
  * @property bool $is_encrypted
+ * @property string $mime_type
  * @property string $public_short_code
  * @property string $private_short_code
  * @property string $stored_before
@@ -59,7 +60,9 @@ final class File extends Model
 
     public static function store(StoreFileAction $action): self
     {
-        if (self::isImagePlacement($action->tmpName)) {
+        $fileMimeType = self::extractMimeType($action->tmpName);
+
+        if (self::isImageMimeType($fileMimeType)) {
             ExifFilter::clear($action->tmpName);
         }
 
@@ -70,6 +73,7 @@ final class File extends Model
         $file->save([
             'id' => $action->id,
             'original_name' => $action->originalName,
+            'mime_type' => $fileMimeType,
             'public_short_code' => ShortCodeGenerator::generate($action->shortCodeLength),
             'private_short_code' => ShortCodeGenerator::generate($action->shortCodeLength),
             'stored_before' => (new \DateTime('now'))->add($action->expireIn)->format('Y-m-d H:i:s'),
@@ -83,24 +87,17 @@ final class File extends Model
 
     public function isImage(): bool
     {
-        if (!$this->is_encrypted) {
-            return self::isImagePlacement($this->placement);
-        }
-
-        $tmpDecryptPlacement = $this->createDecryptedCopy();
-        $isImage = self::isImagePlacement($tmpDecryptPlacement);
-        $this->removeDecryptedCopy();
-
-        return $isImage;
+        return self::isImageMimeType($this->mime_type);
     }
 
-    private static function isImagePlacement(string $placement): bool
+    private static function isImageMimeType(string $mimeType): bool
     {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $isImage = str_contains(finfo_file($finfo, $placement), 'image/');
-        finfo_close($finfo);
+        return str_contains($mimeType, 'image/');
+    }
 
-        return $isImage;
+    private static function extractMimeType(string $placement): string
+    {
+        return (new \finfo(FILEINFO_MIME_TYPE))->file($placement);
     }
 
     public function isPublicShortCode(string $shortCode): bool
@@ -125,7 +122,7 @@ final class File extends Model
 
     public function replaceOnNewDecryptedFile(string $tmpName): void
     {
-        if (self::isImagePlacement($tmpName)) {
+        if ($this->isImage()) {
             ExifFilter::clear($tmpName);
         }
 
@@ -283,7 +280,7 @@ final class File extends Model
     private function setupFileDownloadResponse(string $filePlacement): void
     {
         header('Cache-Control: No-Store');
-        header("Content-Disposition: attachment; filename=\"$this->original_name\"");
+        header(sprintf('Content-Disposition: attachment; filename="%s"', $this->original_name));
         header('Content-Length: ' . filesize($filePlacement));
         readfile($filePlacement);
     }

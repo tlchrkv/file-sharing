@@ -7,6 +7,7 @@ module.exports = {
         app: './app/assets/app.js',
         index: './app/assets/pages/index/index.js',
         admin: './app/assets/pages/admin/index.js',
+        preview: './app/assets/pages/preview/index.js',
     },
     output: {
         filename: '[name].js',

@@ -9,9 +9,19 @@ use Phalcon\Mvc\Controller;
 
 final class FileController extends Controller
 {
-    public function initialize()
+    public function downloadAction(string $shortCode)
     {
-        $this->view->setTemplateAfter('simple');
+        $file = File::getByShortCode($shortCode);
+
+        if ($this->isRequireToAskPassword($file)) {
+            return;
+        }
+
+        if ($this->isRequiredPasswordPassed($file)) {
+            $file->setPassword($this->request->getPost('password'));
+        }
+
+        $file->sendToBrowser();
     }
 
     public function showAction(string $shortCode)
@@ -19,6 +29,8 @@ final class FileController extends Controller
         $file = File::getByShortCode($shortCode);
 
         if ($this->isRequireToAskPassword($file)) {
+            $this->view->setTemplateAfter('simple');
+
             return $this->view->render('file', 'enter_password');
         }
 
@@ -27,10 +39,14 @@ final class FileController extends Controller
         }
 
         if ($file->isPublicShortCode($shortCode)) {
-            $file->sendToBrowser();
+            $this->view->setTemplateAfter('preview');
+
+            return $this->view->render('file', 'preview', ['file' => $file]);
         }
 
         if ($file->isPrivateShortCode($shortCode)) {
+            $this->view->setTemplateAfter('simple');
+
             return $this->view->render('file', 'admin', ['file' => $file]);
         }
 

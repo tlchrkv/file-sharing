@@ -9,6 +9,7 @@ $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
 $router->setDI($di);
 
 $router->add('/{shortCode}', 'File::show')->via(['GET', 'POST']);
+$router->add('/{shortCode}/download', 'File::download')->via(['GET', 'POST']);
 
 $router->add('/', 'Index::index')->via(['GET']);
 

@@ -25,7 +25,7 @@
                     </div>
                     <div style="display: flex;justify-content: center;border-top: 1px solid #dfdfdf;background-color: white;">
                         <div style="display: flex;justify-content: space-between;width: 100%;">
-                            <div id="downloadButton" class="btn-editor c-pointer" style="border-right: 1px solid #dfdfdf;width: 100%;text-align: center;padding: 10px;" data-url="/{{ file.public_short_code }}">
+                            <div id="downloadButton" class="btn-editor c-pointer" style="border-right: 1px solid #dfdfdf;width: 100%;text-align: center;padding: 10px;" data-url="/{{ file.public_short_code }}/download">
                                 <span class="material-icons-outlined" style="vertical-align: sub;font-size: 17px;">file_download</span> Download
                             </div>
                             <div id="cropButton" class="btn-editor c-pointer" style="width: 100%;text-align: center;padding: 10px;">
@@ -45,7 +45,7 @@
                     </div>
                     <div style="display: flex;justify-content: center;border-top: 1px solid #dfdfdf;background-color: white;">
                         <div style="width: 100%;">
-                            <div id="downloadButton" class="btn-editor c-pointer" style="width: 100%;text-align: center;padding: 10px;" data-url="/{{ file.public_short_code }}">
+                            <div id="downloadButton" class="btn-editor c-pointer" style="width: 100%;text-align: center;padding: 10px;" data-url="/{{ file.public_short_code }}/download">
                                 <span class="material-icons-outlined" style="vertical-align: sub;font-size: 17px;">file_download</span> Download
                             </div>
                         </div>
