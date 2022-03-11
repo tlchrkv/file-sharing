@@ -17,4 +17,10 @@ final class IndexController extends Controller
     {
         $this->view->maxFileMegabytes = $this->config->maxFileMegabytes;
     }
+
+    public function resultAction()
+    {
+        $this->view->publicLink = $_POST['public_link'];
+        $this->view->privateLink = $_POST['private_link'];
+    }
 }

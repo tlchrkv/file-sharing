@@ -2,7 +2,6 @@ import Encryption from "./Encryption";
 import DaysRange from "./DaysRange";
 import FileInput from "./FileInput";
 import PasswordComplexity from "../Shared/PasswordComplexity";
-import Result from "./Result";
 
 export default class FileUploadForm {
   constructor() {
@@ -16,7 +15,6 @@ export default class FileUploadForm {
 
     DaysRange.showLabel();
     PasswordComplexity.setupHandlerOnKeyup($('#file-upload__password-input'), $('#file-upload__password-validation'));
-    Result.setupHandlersOnClick();
 
     this.setupHandlerOnSubmit();
   }
@@ -54,13 +52,9 @@ export default class FileUploadForm {
       processData: false,
       contentType: false,
       success: (data) => {
-        $('#file-upload__password-input').val('');
-        $('#file-upload').hide();
-        $('#file-upload__result').show();
-        $('#common-template__header').hide();
-
         $('#file-upload__public-link').val(data.data.public_link);
         $('#file-upload__private-link').val(data.data.private_link);
+        $('#file-upload__upload-success').submit();
       },
       error: (data) => {
         console.log(data);
