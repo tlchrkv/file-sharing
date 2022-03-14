@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\Authenticator;
 use App\Models\File;
 use App\Models\PasswordComplexity\ComplexityMeter;
 use App\Models\StoreFileAction;
@@ -59,15 +60,19 @@ final class ApiController extends Controller
 
     public function updateAction(string $id)
     {
+        $password = Authenticator::getPasswordFromHeader();
+
         /** @var File $file */
         $file = File::findFirstById($id);
+
+        $file->checkPassword($password);
 
         $isFileEncryptedBefore = $file->is_encrypted;
 
         $file->replaceOnNewDecryptedFile($_FILES['file']['tmp_name']);
 
-        if ($isFileEncryptedBefore && $_POST['password']) {
-            $file->encrypt($_POST['password'], $this->getPasswordComplexityMeter());
+        if ($isFileEncryptedBefore && $password) {
+            $file->encrypt($password, $this->getPasswordComplexityMeter());
         }
 
         return $this->response->setStatusCode(204)->send();
@@ -88,21 +93,26 @@ final class ApiController extends Controller
 
     public function decryptAction(string $id)
     {
-        $_PATCH = [];
-        parse_str(file_get_contents('php://input'), $_PATCH);
+        $password = Authenticator::getPasswordFromHeader();
 
         /** @var File $file */
         $file = File::findFirstById($id);
 
-        $file->decrypt($_PATCH['password']);
+        $file->checkPassword($password);
+
+        $file->decrypt($password);
 
         return $this->response->setStatusCode(204)->send();
     }
 
     public function deleteAction(string $id)
     {
+        $password = Authenticator::getPasswordFromHeader();
+
         /** @var File $file */
         $file = File::findFirstById($id);
+
+        $file->checkPassword($password);
 
         $file->fullDelete();
 

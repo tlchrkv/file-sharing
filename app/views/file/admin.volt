@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div id="manage">
+<div id="manage" data-csrf="{{ password64 }}">
     <div>
         <h1 style="text-align: center;" class="mb-4"><span style="color: #0d6efd;">A</span>dmin ar<span style="color: darkcyan;">e</span>a</h1>
         <div class="my-5"></div>
@@ -75,7 +75,7 @@
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock</span>
                                 Encrypt
                             </button>
-                            <button id="decryptOpenModal" type="button" class="btn btn-outline-dark">
+                            <button id="decryptButton" type="button" class="btn btn-outline-dark" data-id="{{ file.id }}">
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock_open</span>
                                 Decrypt
                             </button>
@@ -84,7 +84,7 @@
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock</span>
                                 Encrypt
                             </button>
-                            <button id="decryptOpenModal" type="button" class="btn btn-outline-dark" style="display: none;">
+                            <button id="decryptButton" type="button" class="btn btn-outline-dark" style="display: none;" data-id="{{ file.id }}">
                                 <span class="material-icons-outlined" style="vertical-align: bottom;">lock_open</span>
                                 Decrypt
                             </button>
@@ -113,52 +113,6 @@
 {#    </div>#}
 </div>
 
-<div class="modal fade" id="downloadModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-4">
-            <form id="download" data-id="{{ file.id }}" method="POST" action="/{{ file.public_short_code }}">
-                <div class="modal-header" style="border-bottom: none;padding-bottom: 0;">
-                    <h5 class="modal-title" style="width: 100%;text-align: center;">Enter password</h5>
-{#                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-                </div>
-                <div class="modal-body">
-{#                    <h6 class="card-subtitle text-muted text-center mt-1 mb-3">Enter password</h6>#}
-                    <div class="input-group pt-2">
-                        <input type="password" class="form-control text-center" id="downloadFilePasswordInput" placeholder="type here..." name="password" style="padding-left: 14%;" required>
-                        <button type="submit" class="btn btn-primary" id="downloadEncryptedButton"><span class="material-icons">file_download</span></button>
-                        <div id="downloadFilePasswordMessage" style="display: block;text-align: center;"></div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="border-top: none;justify-content: center;padding-top: 0;">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="updateEncryptedModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-4">
-            <form id="updateEncryptedFile" data-id="{{ file.id }}">
-                <div class="modal-header" style="border-bottom: none;padding-bottom: 0;">
-                    <h5 class="modal-title" id="exampleModalLabel" style="width: 100%;text-align: center;">Enter password</h5>
-{#                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-                </div>
-                <div class="modal-body">
-{#                    <h6 class="card-subtitle text-muted text-center mt-1 mb-3">Enter password</h6>#}
-                    <div class="input-group pt-2">
-                        <input type="password" class="form-control text-center" id="updateEncryptedFilePasswordInput" placeholder="type here..." name="password" style="padding-left: 14%;" required>
-                        <button type="submit" class="btn btn-primary" id="updateEncryptedButton"><span class="material-icons">navigate_next</span></button>
-                        <div id="updateEncryptedFilePasswordMessage" style="display: block;text-align: center;"></div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="border-top: none;justify-content: center;padding-top: 0;">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="encryptionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
@@ -173,29 +127,6 @@
                         <input type="password" class="form-control text-center" id="encryptFilePasswordInput" placeholder="type here..." name="password" style="padding-left: 14%;" required>
                         <button type="submit" class="btn btn-primary"><span class="material-icons">navigate_next</span></button>
                         <div id="encryptFilePasswordMessage" style="display: block;text-align: center;"></div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="border-top: none;justify-content: center;padding-top: 0;">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="decryptionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-4">
-            <form id="decryptFileForm" data-id="{{ file.id }}">
-                <div class="modal-header" style="border-bottom: none;padding-bottom: 0;">
-                    <h5 class="modal-title" id="exampleModalLabel" style="width: 100%;text-align: center;">Enter password</h5>
-{#                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-                </div>
-                <div class="modal-body">
-{#                    <h6 class="card-subtitle text-muted text-center mt-1 mb-3">Enter password</h6>#}
-                    <div class="input-group pt-2">
-                        <input type="password" class="form-control text-center" id="decryptFilePasswordInput" placeholder="type here..." name="password" style="padding-left: 14%;" required>
-                        <button type="submit" class="btn btn-primary"><span class="material-icons">navigate_next</span></button>
-                        <div id="decryptFilePasswordMessage" style="display: block;text-align: center;"></div>
                     </div>
                 </div>
                 <div class="modal-footer" style="border-top: none;justify-content: center;padding-top: 0;">
@@ -251,5 +182,9 @@
     </div>
 </div>
 {% endif %}
+
+<form action="/{{ file.public_short_code }}/download" method="post" id="downloadForm">
+    <input type="hidden" value="{{ password64 }}" name="password64">
+</form>
 
 <script src="/assets/admin.js"></script>

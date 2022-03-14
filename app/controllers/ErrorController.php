@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\Exceptions\FileNotFound;
 use Phalcon\Mvc\Controller;
 
 final class ErrorController extends Controller
@@ -23,7 +24,13 @@ final class ErrorController extends Controller
         }
 
         $this->view->setTemplateAfter('simple');
-        $this->view->message = $exception->getMessage();
+
+        if ($exception instanceof \Phalcon\Mvc\Dispatcher\Exception || $exception instanceof FileNotFound) {
+            $this->view->message = 'Page not found';
+        } else {
+            $this->view->message = $exception->getMessage();
+        }
+
         $this->view->trace = $this->config->env === 'local' ? nl2br(htmlentities($exception->getTraceAsString())) : '';
 
         $this->view->btnLink = '/';

@@ -6,10 +6,10 @@ import download from "./download";
 import PasswordComplexity from "../../components/Shared/PasswordComplexity";
 
 $(document).ready(() => {
-    encryptionForm();
-    decryptionForm();
-    deleteForm();
-    cropImage();
-    download();
-    PasswordComplexity.setupHandlerOnKeyup($('#encryptFilePasswordInput'), $('#encryptFilePasswordMessage'));
+  encryptionForm();
+  decryptionForm();
+  deleteForm();
+  cropImage();
+  download();
+  PasswordComplexity.setupHandlerOnKeyup($('#encryptFilePasswordInput'), $('#encryptFilePasswordMessage'));
 });

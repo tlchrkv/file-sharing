@@ -8,6 +8,6 @@ final class WrongPassword extends \Exception
 {
     public function __construct()
     {
-        parent::__construct('Algorithm crashed');
+        parent::__construct('Decryption failed');
     }
 }

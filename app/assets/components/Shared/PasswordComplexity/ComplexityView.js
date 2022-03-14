@@ -25,6 +25,7 @@ export default class ComplexityView {
     this.$input.addClass('is-invalid');
     this.$validationMessage.removeClass('valid-feedback');
     this.$validationMessage.addClass('invalid-feedback');
+    this.$validationMessage.show();
     this.$validationMessage.html('Password complexity is low');
   }
 
@@ -33,6 +34,7 @@ export default class ComplexityView {
     this.$input.addClass('is-valid');
     this.$validationMessage.removeClass('invalid-feedback');
     this.$validationMessage.addClass('valid-feedback');
+    this.$validationMessage.show();
     this.$validationMessage.html('Password complexity is ' + complexity);
   }
 }

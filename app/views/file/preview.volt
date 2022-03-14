@@ -1,4 +1,4 @@
-<div class="p-5 h-100">
+<div class="p-5 h-100" data-csrf="{{ password64 }}">
   <div class="card h-100" style="border: none;">
 
     {% if file.isImage() %}
@@ -33,25 +33,6 @@
   </div>
 </div>
 
-<div class="modal fade" id="downloadModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <form id="download" data-id="{{ file.id }}" method="POST" action="/{{ file.public_short_code }}/download">
-        <div class="modal-header" style="border-bottom: none;padding-bottom: 0;">
-          <h5 class="modal-title" style="width: 100%;text-align: center;">Enter password</h5>
-          {#                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-        </div>
-        <div class="modal-body">
-          {#                    <h6 class="card-subtitle text-muted text-center mt-1 mb-3">Enter password</h6>#}
-          <div class="input-group pt-2">
-            <input type="password" class="form-control text-center" id="downloadFilePasswordInput" placeholder="type here..." name="password" style="padding-left: 14%;" required>
-            <button type="submit" class="btn btn-primary" id="downloadEncryptedButton"><span class="material-icons">file_download</span></button>
-            <div id="downloadFilePasswordMessage" style="display: block;text-align: center;"></div>
-          </div>
-        </div>
-        <div class="modal-footer" style="border-top: none;justify-content: center;padding-top: 0;">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+<form action="/{{ file.public_short_code }}/download" method="post" id="downloadForm">
+  <input type="hidden" value="{{ password64 }}" name="password64">
+</form>

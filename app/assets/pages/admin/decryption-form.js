@@ -1,43 +1,31 @@
-import ComplexityView from "../../components/Shared/PasswordComplexity/ComplexityView";
-
 const decryptionForm = () => {
-    const $decryptFileForm = $('#decryptFileForm');
-    const $modal = new bootstrap.Modal($('#decryptionModal'));
+  const $decryptButton = $('#decryptButton');
 
-    const $passwordInput = $('#decryptFilePasswordInput');
-    const $passwordMessage = $('#decryptFilePasswordMessage');
-    const complexityView = new ComplexityView($passwordInput, $passwordMessage);
+  $decryptButton.on('click', (e) => {
+    e.preventDefault();
 
-    $passwordInput.on('keyup change', () => complexityView.clear());
-
-    $('#decryptOpenModal').on('click', () => {
-        $modal.show();
-        $passwordInput.focus();
+    $.ajax('/api/v1/files/' + $decryptButton.data('id') + '/decrypt', {
+      headers: {
+        'Authorization': $('#manage').data('csrf')
+      },
+      method: 'PATCH',
+      data: null,
+      processData: false,
+      contentType: false,
+      success: (data) => {
+        $decryptButton.hide();
+        $('#encryptOpenModal').show();
+        $('#encryptionStatusEncrypted').hide();
+        $('#encryptionStatusDecrypted').show();
+      },
+      error: function (data) {
+        console.log(data.responseJSON.error);
+      },
+      complete: function () {
+        // hide progress bar
+      },
     });
-
-    $decryptFileForm.on('submit', (e) => {
-        e.preventDefault();
-
-        $.ajax('/api/v1/files/' + $decryptFileForm.data('id') + '/decrypt', {
-            method: 'PATCH',
-            data: $decryptFileForm.serialize(),
-            processData: false,
-            contentType: false,
-            success: (data) => {
-                $modal.hide();
-                $('#decryptOpenModal').hide();
-                $('#encryptOpenModal').show();
-                $('#encryptionStatusEncrypted').hide();
-                $('#encryptionStatusDecrypted').show();
-            },
-            error: function (data) {
-                complexityView.error(data.responseJSON.error);
-            },
-            complete: function () {
-                // hide progress bar
-            },
-        });
-    });
+  });
 };
 
 export default decryptionForm;

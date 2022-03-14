@@ -234,6 +234,27 @@ final class File extends Model
     }
 
     /**
+     * @throws Encryptor\Exceptions\WrongPassword
+     */
+    public function checkPassword(string $password): void
+    {
+        $this->setPassword($password);
+
+        if (!$this->is_encrypted) {
+            return;
+        }
+
+        try {
+            $this->createDecryptedCopy();
+            $this->removeDecryptedCopy();
+        } catch (\Exception $e) {
+            $this->removeDecryptedCopy();
+
+            throw $e;
+        }
+    }
+
+    /**
      * @throws FileRequirePassword
      * @throws Encryptor\Exceptions\CanNotOpenFile
      * @throws Encryptor\Exceptions\WrongPassword
