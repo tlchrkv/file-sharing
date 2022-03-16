@@ -24,6 +24,9 @@ const encryptionForm = () => {
       processData: false,
       contentType: false,
       success: (data) => {
+        const password64 = btoa($passwordInput.val());
+        $('#manage').data('csrf', password64);
+        $('#downloadPasswordInput').val(password64);
         $modal.hide();
         $('#encryptOpenModal').hide();
         $('#decryptButton').show();

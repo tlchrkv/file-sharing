@@ -184,7 +184,7 @@
 {% endif %}
 
 <form action="/{{ file.public_short_code }}/download" method="post" id="downloadForm">
-    <input type="hidden" value="{{ password64 }}" name="password64">
+    <input id="downloadPasswordInput" type="hidden" value="{{ password64 }}" name="password64">
 </form>
 
 <script src="/assets/admin.js"></script>

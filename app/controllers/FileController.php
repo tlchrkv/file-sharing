@@ -33,6 +33,7 @@ final class FileController extends Controller
         }
 
         if ($this->isRequiredPasswordPassed($file)) {
+            $file->checkPassword($this->request->getPost('password'));
             $file->setPassword($this->request->getPost('password'));
             $objects['password64'] = base64_encode($this->request->getPost('password'));
         }
